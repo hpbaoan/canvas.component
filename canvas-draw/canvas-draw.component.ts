@@ -4,6 +4,7 @@ import { fromEvent, Subscription } from 'rxjs';
 @Component({
   selector: 'draw-canvas',
   template: `<canvas #canvas></canvas>
+  <hr />
     <button type="button" class="btn btn-primary" (click)="reset()">Reset</button>
     <label class="" >{{record()}}</label>
   `,
@@ -11,20 +12,25 @@ import { fromEvent, Subscription } from 'rxjs';
 })
 export class CanvasComponent implements AfterViewInit {
 
-  @ViewChild('canvas') public canvas: ElementRef;
+  @ViewChild('canvas')
+  public canvas!: ElementRef;
 
   @Input() public width = 600;
   @Input() public height = 400;
-  @Input() public imageUrl: string;
-  @Input() public pointsData: string;
+  @Input() public imageUrl!: string;
+  @Input() public pointsData!: string;
 
   subscription: Subscription;
-  activePoint:number;
+  activePoint:number = 0;
   points: Array<any> = [3,378,149,322,291,305,316,315,298,367,320,399,2,401];
   startpoint: any;
 
   private ctx: CanvasRenderingContext2D;
-  canvasEl: HTMLCanvasElement;
+  private canvasEl: HTMLCanvasElement;
+
+  constructor() {
+
+  }
 
   public ngAfterViewInit() {
     this.canvasEl = this.canvas.nativeElement;
