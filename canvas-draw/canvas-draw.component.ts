@@ -56,7 +56,6 @@ export class CanvasComponent implements AfterViewInit {
     }
 
     this.captureEvents(this.canvasEl);
-    console.log(this.canvasEl);
 
     let image = new Image();
     image.src = this.imageUrl;
