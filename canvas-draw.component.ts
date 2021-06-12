@@ -15,12 +15,13 @@ export class CanvasComponent implements AfterViewInit {
 
   @Input() public width = 600;
   @Input() public height = 400;
+  @Input() public imageUrl: string;
+  @Input() public pointsData: string;
 
   subscription: Subscription;
   activePoint:number;
-  points: Array<any> = [2,276,148,222,209,222,204,254,240,297,1,301];
+  points: Array<any> = [3,378,149,322,291,305,316,315,298,367,320,399,2,401];
   startpoint: any;
-  imageUrl = "https://picsum.photos/id/1018/400/300";
 
   private ctx: CanvasRenderingContext2D;
   canvasEl: HTMLCanvasElement;
@@ -29,8 +30,23 @@ export class CanvasComponent implements AfterViewInit {
     this.canvasEl = this.canvas.nativeElement;
     this.ctx = this.canvasEl.getContext('2d');
 
-    if(!this.points) {
-      this.points = [];
+    if (!this.imageUrl) {
+      // Demo only
+      this.imageUrl = "https://picsum.photos/id/1018/600/400";
+    }
+
+    if(this.pointsData) {
+      var v = this.pointsData.replace(/[^0-9\,]/ig, '');
+      if (v.length) {
+          this.points = v.split(',').map(function (point) {
+              return parseInt(point, 10);
+          });
+      } else {
+          this.points = [];
+      }
+    } else {
+      // Demo only
+      this.points = [3,378,149,322,291,305,316,315,298,367,320,399,2,401];
     }
 
     this.captureEvents(this.canvasEl);
@@ -41,8 +57,8 @@ export class CanvasComponent implements AfterViewInit {
 
     let that = this;
     image.onload = function() {
-      that.canvasEl.height = image.height;
-      that.canvasEl.width = image.width;
+      that.canvasEl.height = image.height || that.width;
+      that.canvasEl.width = image.width || that.height;
       that.canvasEl.style.background = 'url('+image.src+')';
       that.canvasEl.style.backgroundSize = 'contain';
 
@@ -75,13 +91,6 @@ export class CanvasComponent implements AfterViewInit {
         var a = y0 - y1, b = x1 - x0, c = x0 * y1 - y0 * x1;
         return Math.abs(a * x + b * y + c) / Math.sqrt(a * a + b * b);
     }
-  };
-
-  getMousePos (canvas, evt) {
-      return {
-          x: evt.clientX - this.canvasEl.offsetLeft,
-          y: evt.clientY - this.canvasEl.offsetTop
-      };
   };
 
   //-----------
